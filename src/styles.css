@@ -184,3 +184,6 @@ details.panel[open] > summary { margin-bottom: 12px; }
 .motion-controls { display: grid; gap: 10px; font-size: 0.9rem; }
 .motion-controls .row { display: flex; align-items: center; gap: 8px; }
 .motion-controls .hint { margin: 0; }
+
+/* blobatar/motion.css lifts and scales a face on hover; keep it in place. */
+.mo-root:hover { transform: none; }
