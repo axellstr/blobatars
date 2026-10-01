@@ -44,7 +44,7 @@ export const initialSettings = (): Settings => ({
   expr: "none",
   shape: "circle",
   colorMode: "brand",
-  brandColor: BRAND_COLORS[1].hex, // Purple
+  brandColor: BRAND_COLORS[0].hex, // Orange
   backdrop: WHITE,
   lockHue: false,
   hue: 200,
