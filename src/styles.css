@@ -178,3 +178,9 @@ details.panel[open] > summary { margin-bottom: 12px; }
   .device { padding: 12px; border-radius: 24px; }
   .acct-top h2 { font-size: 1.8rem; }
 }
+
+/* Animated avatars render as inline SVG instead of <img> */
+.acct-avatar svg, .user-row svg, .sizes svg { display: block; border-radius: 50%; }
+.motion-controls { display: grid; gap: 10px; font-size: 0.9rem; }
+.motion-controls .row { display: flex; align-items: center; gap: 8px; }
+.motion-controls .hint { margin: 0; }
