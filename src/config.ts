@@ -15,41 +15,23 @@ export function configCode(
   brand: BrandSettings | null,
 ): string {
   const style: Record<string, unknown> = { ...base };
+  const head = brand?.colors[0];
+  if (brand && head) {
+    style.palette = { ...(brand.backdrop ? { bg: brand.backdrop } : {}), head, eye: brand.eye ?? eyeFor(head) };
+  }
   if (expr !== "none") style.expression = "__EXPR__";
   const styleBody = toTs(style).replace("'__EXPR__'", expr);
 
   const lines = ["import type { BlobatarOptions } from 'blobatar';"];
   if (expr !== "none") lines.push(`import { ${expr} } from 'blobatar/expression';`);
-  lines.push("", "/** Shape, eyes and backdrop shared by every avatar. */");
-  lines.push(`export const AVATAR_STYLE: BlobatarOptions = ${styleBody};`, "");
-
-  if (!brand || !brand.colors.length) {
-    lines.push(
-      "/** Options for one user. The seed should be stable, e.g. the user ID or email. */",
-      "export function avatarOptions(seed: string): BlobatarOptions {",
-      "  return AVATAR_STYLE;",
-      "}",
-      "",
-    );
-    return lines.join("\n");
-  }
-
-  const colors = brand.colors.map((head) => ({ head, eye: brand.eye ?? eyeFor(head) }));
   lines.push(
-    "/** Brand body colours, each with the eye colour that reads best on it. */",
-    "const AVATAR_COLORS = [",
-    ...colors.map((c) => `  { head: '${c.head}', eye: '${c.eye}' },`),
-    "];",
+    "",
+    "/** Shape, eyes and colours shared by every avatar. */",
+    `export const AVATAR_STYLE: BlobatarOptions = ${styleBody};`,
     "",
     "/** Options for one user. The seed should be stable, e.g. the user ID or email. */",
     "export function avatarOptions(seed: string): BlobatarOptions {",
-    "  const s = seed.normalize('NFC').trim().toLowerCase();",
-    "  let h = 0x811c9dc5;",
-    "  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 0x01000193);",
-    "  const color = AVATAR_COLORS[(h >>> 0) % AVATAR_COLORS.length];",
-    brand.backdrop
-      ? `  return { ...AVATAR_STYLE, palette: { bg: '${brand.backdrop}', ...color } };`
-      : "  return { ...AVATAR_STYLE, palette: color };",
+    "  return AVATAR_STYLE;",
     "}",
     "",
   );

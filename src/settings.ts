@@ -26,7 +26,7 @@ export type Settings = {
   expr: ExpressionName | "none";
   shape: Shape;
   colorMode: ColorMode;
-  brandColors: string[];
+  brandColor: string;
   backdrop: string | null;
   lockHue: boolean;
   hue: number;
@@ -44,7 +44,7 @@ export const initialSettings = (): Settings => ({
   expr: "none",
   shape: "circle",
   colorMode: "brand",
-  brandColors: BRAND_COLORS.map((c) => c.hex),
+  brandColor: BRAND_COLORS[1].hex, // Purple
   backdrop: WHITE,
   lockHue: false,
   hue: 200,
@@ -76,7 +76,7 @@ export function baseOptions(s: Settings): BlobatarOptions {
 export function brandSettings(s: Settings): BrandSettings | null {
   if (s.colorMode !== "brand") return null;
   return {
-    colors: s.brandColors,
+    colors: [s.brandColor],
     backdrop: hasBackdrop(s) ? s.backdrop : null,
     eye: s.lockEyeColor ? s.eyeColor : null,
   };

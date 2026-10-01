@@ -29,16 +29,6 @@ export function Playground({ settings: s, update }: Props) {
   const setTrait = (key: TraitKey, patch: Partial<{ on: boolean; v: number }>) =>
     update({ traits: { ...s.traits, [key]: { ...s.traits[key], ...patch } } });
 
-  const toggleBrandColor = (hex: string) => {
-    const on = s.brandColors.includes(hex);
-    if (on && s.brandColors.length === 1) return; // keep at least one
-    update({
-      brandColors: on
-        ? s.brandColors.filter((c) => c !== hex)
-        : BRAND_COLORS.map((c) => c.hex).filter((c) => c === hex || s.brandColors.includes(c)),
-    });
-  };
-
   const code = useMemo(() => configCode(baseOptions(s), s.expr, brandSettings(s)), [s]);
 
   const copy = async () => {
@@ -92,12 +82,12 @@ export function Playground({ settings: s, update }: Props) {
           {brand ? (
             <>
               <div className="field">
-                <span>Body colours <small>(each name picks one of the selected)</small></span>
+                <span>Body colour</span>
                 <div className="swatches">
                   {BRAND_COLORS.map((c) => (
                     <button key={c.hex} title={`${c.name} ${c.hex}`}
-                      className={`swatch ${s.brandColors.includes(c.hex) ? "on" : ""}`}
-                      style={{ background: c.hex }} onClick={() => toggleBrandColor(c.hex)} />
+                      className={`swatch ${s.brandColor === c.hex ? "on" : ""}`}
+                      style={{ background: c.hex }} onClick={() => update({ brandColor: c.hex })} />
                   ))}
                 </div>
               </div>
